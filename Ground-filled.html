@@ -39,7 +39,7 @@
 			var meshGrassMaterial = new THREE.MultiMaterial( materials );
 			var meshDirtMaterial = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load('textures/dirt.jpg') } );
 			
-			var geometry = new THREE.BoxGeometry(1,1,1);
+			var geometry = new THREE.CubeGeometry(1,1,1);
 			var cube = new THREE.Mesh(geometry, meshGrassMaterial);
 			var cube2 = new THREE.Mesh(geometry, meshDirtMaterial);
 
