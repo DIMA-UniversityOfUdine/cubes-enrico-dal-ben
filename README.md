@@ -1,118 +1,117 @@
-# Modeling and rendering with cubes
+# Relazione per il primo progettino
+Autori : Enrico Dal Ben, Haki Dine
 
-![Image from Crossy Road game](http://vignette2.wikia.nocookie.net/crossyroad/images/a/a0/Unnamed.png/revision/latest?cb=20150716180741)
+## Parte I : Creazione di un terreno basato su heightmap
+Autore : Enrico Dal Ben
 
-## Prerequisites
+### Studio e modifica del codice iniziale
+Partendo dal codice iniziale fornito dal Professor Ranon nel file StartingCode-nolights.html ho creato un cubo di base con la texture inspirata ai cubi di Minecraft.
+Per creare il cubo ho caricato 6 texture su un vettore e poi ho generato il materiale con cui ricoprire il cubo.
+```javascript
+  	var material1 = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load('textures/border.jpg') } );
+	var material2 = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load('textures/border.jpg') } );
+	var material3 = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load('textures/grass.jpg') } );
+	var material4 = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load('textures/dirt.jpg') } );
+	var material5 = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load('textures/border.jpg') } );
+	var material6 = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load('textures/border.jpg') } );
+  
+	var materials = [material1, material2, material3, material4, material5, material6];
+	var meshGrassMaterial = new THREE.MultiMaterial( materials );
+```
+Utilizzando il codice presente nel file StartingCode-heightmap.html ho capito come calcolare il colore di un pixel in una heightmap e come ritornare un vettore contenente i dati sulla tonalità di grigio utilizzando la funzione *getHeightData(img)*.
 
-- read carefully all slides and notes up to lecture 8 before you start. Try the proposed exercises.
-- familiarize with git and github:
-	- [Codecademy’s Learn Git](https://www.codecademy.com/learn/learn-git)
-	- [Git Resources for Visual Learners](https://changelog.com/posts/git-resources-for-visual-learners)
-	- [Introduction to GitHub for Newcomers](https://www.youtube.com/watch?v=uNa9GOtM6NE&feature=youtu.be)
-	- [Github desktop application](https://desktop.github.com)
-- [download three.js r84 and examples](https://github.com/mrdoob/three.js/archive/master.zip)
+![Cubo iniziale](img/cubo.jpg)
 
-## Hints
+### Sviluppo
+Partendo dal cubo iniziale, con texture applicata, ho creato inizialmente un ciclo che clonava l'oggetto e poi lo spostava nella posizione corretta creando così un terreno piatto.
+Sviluppando ulteriormente questa funzione in una funzione chiamata *CreateTerrain(width, height, data)* ho aggiunto i cubi e combinando il risultato fornito da *getHeightData(img)* sull'immagine, ho modificato la loro coordinata y per adattarla al colore del pixel : più chiaro è il pixel più in alto si troverà il cubo.\*
+Il risultato di questo processo è il file *Grounds-nolights.html*.
 
-- Try to work out a basic project which satisfies all requirements well before the deadline and as soon as possible: you will then use the remaining time to refine, improve and polish.
-- If you are stuck for too much time on a problem, ask for help, preferably in the forum.
-- the process is as important as the result. Use this project to learn a workflow, and how to use tools effectively. Experiment, and try to come up with efficient, elegant, and well commented code.
-- commit often in your git repository and with meaningful comments. 
+![risultato intermedio](img/complete.jpg)
 
-## Goals 
-In this project you'll first create an interesting scene of your own design, made up just of cubes. The cubes can be
-translated, scaled and rotated as you wish. For inspiration, look at [Minecraft](https://minecraft.net/en-us/), 
-Legos, and voxel-based games such as [Crossy Road](http://www.crossyroad.com).
+Il risultato del metodo *CreateTerrain(width, height, data)* sembra soddisfacente solo ne caso in cui la differenza di altezza da un cubo a un altro si di una unità e quindi non si generino spazi vuoti.
+Per risolvere questo problema ho modificato il codice di *CreateTerrain* aggiungendo un ciclo che, utilizzando le coordinate di quel punto, generi tutti i cubi fino al piano che ha coordinate **(x, 0, z)**.\*
+Questi cubi, però, non sono uguali a quelli generati sopra ma bensi sono dei cubi formati solo dalla texture *dirt.jpg*.
+Il risultato di queste modifiche è il file *Grounds-filled.html*.
+Per realizzare questo progetto ho preso spunto da Minecraft poichè offre ottimi spunti per il lavoro con cubi e texture applicabili a essi.
 
-I am not expecting something highly complex, but I expect something **interesting** and that you use **at least 30 cubes**.
+![Risultato finale](img/complete2.jpg)
 
-In addition, provide your model with a simple but meaningful animation. To do this, you'll have to structure the scene
-graph in a convenient way. The animation can continuosly play itself, or can be controlled by the user through UI controls.
+### Osservazioni
+Ho riscontrato che la funzione *getHeightData(img)* non sempre ritorna lo stesso risultatato per tutti i pixels dello stesso colore, come si può vedere nelle due immagine soprastanti, nononstante mi sia accertato che siano esattamente della stessa tonalità.
+Controllando anche le variabili con lo strumento di ispezione di Google Chrome ho potuto notare che nel vettore che contiene le tre componenti dei colori che formano la sfumatura, una risulta diversa dalle altre dello stesso colore, inspiegabilmente.
 
-After creating a scene, you have a choice:
+####
+\* per i dettagli implementativi si rimanda al codice allegato
 
-- if you are more interested in programming, you can choose to create a terrain for your scene, using a heightmap in the
-form of a greyscale image as input;
-- alternatively, you can choose to create a short movie that presents your scene.
+## Parte II : Movimenti di camera e creazione di un video post-procesato
+Autore : Hake Dine
 
-In either case, see the next sections for more detailed instructions and suggestions. You are also required to document your
-work and write a final report, as detailed below. 
 
-## Starting code
+### Parte iniziale 
+Dopo aver concluso la parte del "Create Terrain" dovevo fare un "movie" usando i movimenti di camera di three.js, inquadrando sempre il terreno creato dal mio collega. Per fare ciò, ho fatto uso degli attributi position e lookat della varibile camera, che è una Perspective Camera.
+  
+```javascript
+  	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+```
+Per prima cosa, ho salvato il valore del tempo in cui iniziano le animazioni in una variabile chiamata "timestart". Questo è reso possibile dalla funzione "Date.now()". Successivamente ho creato una funzione chiamata "CameraChanges(Date.now())" in cui passo il tempo che scorre, e che ho posizionato nella funzione 
+"Update()" già creata dal proffessor Ranon. In questa funzione userò condizioni "if()" nelle quali userò di nuovo la funzione "Date.now()",che mi da il tempo che sta trascorrendo, alla quale sottraggo la variabile "timestart". In questo modo  posso dettare i tempi di quando cambio i movimenti della camera
 
-I have provided two starting scenes, one without lights and textures, and one which includes a basic lighting setup 
-and an example of texture usage. Your final result should be obtained by modifiying ONE of these files. 
+```javascript
+	var timestart=Date.now();
+```	
+```javascript	
+	function Update() {
+			requestAnimationFrame( Update );
+			CameraChanges(Date.now());
+			stats.update();
+			Render();
+	}
+```
+```javascript	
+	function CameraChanges(Date){
+		if(Date-timestart<3000){
+			............
+			............
+		}
+```
 
-Choose the one you prefer based on the kind of result you want to obtain, and how much you want to experiment with features we haven't yet explained in our lectures. You are free to do any modifications, including replacing my code, e.g. to use an orthographic camera instead of a perspective one.
+### Applicare movimenti di camera
 
-For the cube materials, without lights you can use MeshBasicMaterial for solid, textured, or wireframe rendering. 
+Per quanto riguarda le proprietà position delle coordinate x,y e z ho usato dei coefficenti a,b e c che usavo come misura di spostamento in positivo o in negativo. 
+Quest'ultimi gli ho moltiplicati per dei numeri costanti diversi ogni volta: più grande è il numero costante, più veloce avviene la transizione della camera nella posizione voluta.  
+La proprietà lookAt invece, l'ho usata ad ogni cambiamento di positione della camera in modo da dire alla camera virtuale di puntare sempre nello stesso punto, che in questo caso è l'origine.
+ 
+```javascript
+	var a=0.002,b=0.002,c=0.001;
+```	
+```javascript	
+	camera.position.x += a*24;
+	
+	camera.position.y -= b*40;
+	
+	camera.position.z -= c*100;
+	
+	camera.lookAt( new THREE.Vector3(0,0,0));
+```
 
-When using lights, it is better to use MeshPhongMaterial for the cubes. The example also includes some code to render shadows; if you like the effect, you'll need to write similar code for all the boxes you will insert, or you can remove it entirely for rendering without shadows.
+Per i cambi totali di inquadratura ho usato sempre gli attributi position, ma ho applicato delle condizioni su una variabile chiamata shots. Questa varabile parte da valore 0, e ad
+ogni cambio di inquadratura totale si incrementa di uno. Dentro alle condizioni riposiziono la camera e incremento shots. 
+ 
+```javascript
+	var shots=0;
+```	
+```javascript	
+	if(shots==0){
+		camera.position.x = -5;
+		camera.position.y = 30;
+		camera.position.z = 30;
+		shots+=1;		
+	}	
+	camera.position.x += a*50;
+	camera.lookAt( new THREE.Vector3(0,0,0));
+```
 
-The third starting code file is necessary only if you choose to create a terrain. It loads a *m by n* PNG image from a file and builds an array of *m x n* values where each value is a greyscale value in the range 0-255. The code assumes that the image is composed by four channels (RGBA) and the value of the three RGB channel is the same. If you use another kind of image, you will have to modify the code accordingly.
+Dopo aver finito tutti i movimenti/cambi di inquadratura da me voluti, ho usato il software di screen capturing chiamato Ice Screen Recorder per fare il video.
 
-## Steps 
-
-1. clone the starting code in the repository.
-2. examine the starting code carefully. In the case of the code which uses lights, we are using stuff that has not been explained in the course yet. However, with some help from the [three.js documentation](https://threejs.org/docs/index.html#Manual/Introduction/Creating_a_scene), it should not be too hard to figure out what each line does. Try to play with the code and modify values, and gain some understanding by observing the result of your changes. Often, we don't need to fully understand how code really function, or the underlying theory.
-3. Prepare, and add to the repository, a journal.md file for logging your progress and choices.
-3. design and implement your scene. Here, you can choose between different methods; it is a good exercise to try a couple of different alternatives (however, this is not mandatory)
-	- design your scene on graphed paper, deriving, for each box, the necessary translation, rotation, and scaling values. Then, you can directly code the scene in three.js
-	- prototype your scene in Unity. Placing, rotating, and scaling grey boxes is straightforward, as we showed in classroom. You can change the color
-	or texture of a cube by: (i) creating a new material; (ii) assigning the material to the cube; (iii) changing, in the inspector, the material albedo color or texture. See the [Unity documentation for these operations](https://docs.unity3d.com/Manual/Materials.html). You can then reproduce the scene in three.js.
-	- directly create your scene using the [three.js editor](https://threejs.org/editor/). In this case, you can use the "scene export" function to directly export the scene in the json-based three.js scene format. Once the result is saved as text file, it should be possible to load it into three.js using the (deprecated) SceneLoader or the new ObjectLoader. I write "it should be possible" because it is not entirely clear if and which of the two will work. So, in theory this solution requires the least amount of work; in practice, it will probably require you to dig into three.js code and maybe spend a few minutes googling for answers to problems. This is quite common with complex, continuously developed code such as three.js and game engines. You will always find bugs, poorly documented features or outdated examples. Learning how to cope with this situations, how to search and ask for help, e.g. on AnswerHub is an important skill than any developer should acquire.
-4. design and implement an animation. Aim for simple animations that can be expressed by a few translations or rotations, or that can be programmed through simple mathematical relations or even physics equations (like Kinematic equations). You might need to introduce nodes (Object3D) in your scene graph to make the animations easier to implement. As with several examples that we have seen, you can make the animation user-controllable by using [dat.gui] (https://github.com/dataarts/dat.gui). Look in three.js examples for how to connect the GUI controls to your scene.
-5. At this point, you need to choose whether to add a terrain or create a short movie. These alternative steps are explained below.
-6. Create a report of your work.
-7. On Monday 27th, I will download your repository and evaluate your work.
-
-### Adding a terrain
-
-The code in StartingCode-heightmap loads a greyscale image from a file and creates and array of the same m x n size of the image, where the value in each cell ranges from 1 (black) to 63,75 (white). 
-Write a function that takes this array, and creates a grid of cubes on the XZ plane, where the scaling and translation in Y for each cube is proportional to the value read in the array, meaning that you should choose a proportionality factor that makes the terrain look good. In other words, you are treating the image as an **heightmap**, where the greyscale value corresponds to the height of the corresponding point. 
-
-You can also choose the cube color or texture based on the heightmap value, e.g. white color for high values (snow), grey color for medium values (rocks), green color for lower values (grass), but this is just an example.
-
-### Creating a short movie
-
-Remove the code for orbiting the camera with the mouse and plan camera movements (e.g., pan, arcing, traveling) and cuts. In the Update function, using the Date.now() Javascript function (that returns the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC) you can check how much time is passed since the application started and then activate the correct camera animation.
-
-For producing the movie, you can use some screen capture application, and then, if you want, you can use video editing software to apply post effects, transitions, and color correction.	
-
-## Documenting and report
-
-For project documentation and reporting, we use the [markdown format](https://daringfireball.net/projects/markdown/syntax), which is also the format of this document. Markdown is a lightweight markup language with plain text formatting syntax which is easy and quick to write, very human-readable, and that can be converted to HTML.
-
-If you need more features than the ones that markdown provides (e.g. writing equations), you can use one of its extensions called [markdeep](https://casual-effects.com/markdeep/). For this project, however, markdown shoud be enough.  
-
-You are required to document your project in two ways:
-
-- maintain a journal (in a file called journal.md) describing key design decisions, changes, bug symptoms and solutions, including screenshots.
-- create a report (in the readme.md file).
-
-The report should be as brief as possible while covering the following points:
-
-- overall description: what your project is about and the files it uses.
-- results, including images of the scenes created, taken in a way that clearly illustrates that they satisfy the specification.
-- brief explanation of the process that you used to make your scene. Include tools, assets, and planning steps.
-
-## Constraints
-
-If you use textures, please make sure that you have the rights to include them. For example, search for images that come with a [CC Attribution, ShareAlike or NonCommercial licences](https://creativecommons.org/share-your-work/licensing-types-examples/). 
-
-You are allowed to take inspiration, or create models that reproduce what you see in images on the internet, but copying others' work, even with slight modifications, is forbidden and will have serious consequences beyond the deletion of your project. In any case, mention any source of inspiration in your journal and final report.
-
-## Follow-up
-
-You are welcome to extend your project after the deadline, in any way your think is interesting. For example, you could add javascript libraries that analyze music and derive values in real-time that can be fed to three.js for animation purposes, or you could extend your terrain generation software such that hidden cube faces are not created in three.js. If you do that before the final exam, you might get bonus points for this kind of activies - just let me know any progress you make.
-
-## Credits
-
-This project is inspired by the [Cubes Graphics Codex Project](http://graphicscodex.com/projects/cubes/index.html) by Morgan McGuire.
-
-If you like voxels, check out [this three.js-based project](http://voxeljs.com).
-
-## Useful material and references
-
-Sometimes, some feature of the Javascript language can be tricky: [a growing list of quirks](http://bonsaiden.github.io/JavaScript-Garden/)
-
+Link per il movie: https://drive.google.com/file/d/0B-TWV3ekwgp7WGoxbW8zdDBleEk/view
