@@ -43,10 +43,10 @@ Controllando anche le variabili con lo strumento di ispezione di Google Chrome h
 ### Sviluppo modello
 Come modello mi sono inspirato ancora una volta a Minecraft per la creazione di un leone prendendo spunto dal lupo.
 Ho scelto di ricadere su un leone per differenziarmi un po' dal gioco originale.
-Al modello è stato aggiunto il movimento della coda.
+Al modello è stato aggiunto il movimento della coda./*
 Infine il modello così creato è stato aggiunto alla scena con la heightmap e posto al centro.
 Volendo si può anche posizionare in posti random, ma per evitare di doverlo rimpicciolire troppo ho deciso di posizionarlo al centro.
-l'aggiunta del modello alla heigthmap si trova nel file *Ground-model.html*
+l'aggiunta del modello alla heigthmap si trova nel file *Ground-model.html*.
 
 ####
 \* per i dettagli implementativi si rimanda al codice allegato
@@ -61,7 +61,7 @@ Dopo aver concluso la parte del "Create Terrain" dovevo fare dei movimenti di ca
   	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 ```
 Per prima cosa, ho salvato il valore del tempo in cui iniziano le animazioni in una variabile chiamata "timestart". Questo è reso possibile dalla funzione "Date.now()". Successivamente ho creato una funzione chiamata "CameraChanges(Date.now())" in cui passo il tempo che scorre, e che ho posizionato nella funzione 
-"Update()" già creata dal proffessor Ranon. In questa funzione userò condizioni "if()" nelle quali userò di nuovo la funzione "Date.now()",che mi da il tempo che sta trascorrendo, alla quale sottraggo la variabile "timestart". In questo modo  posso dettare i tempi di quando cambio i movimenti della camera
+"Update()" già creata dal proffessor Ranon. In questa funzione userò condizioni "if()" nelle quali userò di nuovo la funzione "Date.now()",che mi da il tempo che sta trascorrendo, alla quale sottraggo la variabile "timestart". In questo modo  posso dettare i tempi di quando cambio i movimenti della camera.
 
 ```javascript
 	var timestart=Date.now();
