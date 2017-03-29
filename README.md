@@ -46,6 +46,7 @@ Ho scelto di ricadere su un leone per differenziarmi un po' dal gioco originale.
 Al modello è stato aggiunto il movimento della coda.
 Infine il modello così creato è stato aggiunto alla scena con la heightmap e posto al centro.
 Volendo si può anche posizionare in posti random, ma per evitare di doverlo rimpicciolire troppo ho deciso di posizionarlo al centro.
+l'aggiunta del modello alla heigthmap si trova nel file *Ground-model.html*
 
 ####
 \* per i dettagli implementativi si rimanda al codice allegato
