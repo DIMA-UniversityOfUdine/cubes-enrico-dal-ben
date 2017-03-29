@@ -51,12 +51,11 @@ l'aggiunta del modello alla heigthmap si trova nel file *Ground-model.html*
 ####
 \* per i dettagli implementativi si rimanda al codice allegato
 
-## Parte II : Movimenti di camera e creazione di un video post-procesato
+## Parte II : Movimenti di camera 
 Autore : Hake Dine
 
-
 ### Parte iniziale 
-Dopo aver concluso la parte del "Create Terrain" dovevo fare un "movie" usando i movimenti di camera di three.js, inquadrando sempre il terreno creato dal mio collega. Per fare ciò, ho fatto uso degli attributi position e lookat della varibile camera, che è una Perspective Camera.
+Dopo aver concluso la parte del "Create Terrain" dovevo fare dei movimenti di camera con three.js, inquadrando sempre il terreno creato dal mio collega. Per fare ciò, ho fatto uso degli attributi position e lookat della varibile camera, che è una Perspective Camera.
   
 ```javascript
   	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -85,19 +84,19 @@ Per prima cosa, ho salvato il valore del tempo in cui iniziano le animazioni in 
 
 ### Applicare movimenti di camera
 
-Per quanto riguarda le proprietà position delle coordinate x,y e z ho usato dei coefficenti a,b e c che usavo come misura di spostamento in positivo o in negativo. 
-Quest'ultimi gli ho moltiplicati per dei numeri costanti diversi ogni volta: più grande è il numero costante, più veloce avviene la transizione della camera nella posizione voluta.  
+Per quanto riguarda le proprietà position delle coordinate x,y e z , ho usato dei coefficenti mx,my e mz che usavo come misura di spostamento in positivo o in negativo. 
+Quest'ultimi gli ho moltiplicati per dei numeri costanti diversi ogni volta: più grande è il numero costante, più veloce avviene la transizione della camera.  
 La proprietà lookAt invece, l'ho usata ad ogni cambiamento di positione della camera in modo da dire alla camera virtuale di puntare sempre nello stesso punto, che in questo caso è l'origine.
  
 ```javascript
-	var a=0.002,b=0.002,c=0.001;
+	var mx=0.002,my=0.003,mz=0.001;
 ```	
 ```javascript	
-	camera.position.x += a*24;
+	camera.position.x += mx*24;
 	
-	camera.position.y -= b*40;
+	camera.position.y -= my*40;
 	
-	camera.position.z -= c*100;
+	camera.position.z -= mz*100;
 	
 	camera.lookAt( new THREE.Vector3(0,0,0));
 ```
@@ -109,16 +108,15 @@ ogni cambio di inquadratura totale si incrementa di uno. Dentro alle condizioni 
 	var shots=0;
 ```	
 ```javascript	
-	if(shots==0){
-		camera.position.x = -5;
-		camera.position.y = 30;
-		camera.position.z = 30;
-		shots+=1;		
-	}	
-	camera.position.x += a*50;
-	camera.lookAt( new THREE.Vector3(0,0,0));
+	if(Date-timestart>=24000 && Date-timestart<30000){
+		if(shots==0){
+			camera.position.x = -5;
+			camera.position.y = 30;
+			camera.position.z = 30;
+			shots+=1;		
+		}	
+		camera.position.x += mx*50;
+		camera.lookAt( new THREE.Vector3(0,0,0));
+	}
 ```
 
-Dopo aver finito tutti i movimenti/cambi di inquadratura da me voluti, ho usato il software di screen capturing chiamato Ice Screen Recorder per fare il video.
-
-Link per il movie: https://drive.google.com/file/d/0B-TWV3ekwgp7WGoxbW8zdDBleEk/view
