@@ -36,7 +36,7 @@ Il risultato dello sviluppo è il file *Grounds-filled.html*.
 
 ![Risultato finale](img/complete2.jpg)
 
-### Osservazioni
+#### Osservazioni
 Ho riscontrato che la funzione *getHeightData(img)* non sempre ritorna lo stesso risultatato per tutti i pixels dello stesso colore, come si può vedere nelle due immagine soprastanti, nononstante mi sia accertato che siano esattamente della stessa tonalità.
 Controllando anche le variabili con lo strumento di ispezione di Google Chrome ho potuto notare che nel vettore che contiene le tre componenti dei colori che formano la sfumatura, una risulta diversa dalle altre dello stesso colore, inspiegabilmente.
 
