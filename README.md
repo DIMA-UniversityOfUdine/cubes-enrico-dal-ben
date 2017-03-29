@@ -43,7 +43,7 @@ Controllando anche le variabili con lo strumento di ispezione di Google Chrome h
 ### Sviluppo modello
 Come modello mi sono inspirato ancora una volta a Minecraft per la creazione di un leone prendendo spunto dal lupo.
 Ho scelto di ricadere su un leone per differenziarmi un po' dal gioco originale.
-Al modello è stato aggiunto il movimento della coda./*
+Al modello è stato aggiunto il movimento della coda.\*
 Infine il modello così creato è stato aggiunto alla scena con la heightmap e posto al centro.
 Volendo si può anche posizionare in posti random, ma per evitare di doverlo rimpicciolire troppo ho deciso di posizionarlo al centro.
 l'aggiunta del modello alla heigthmap si trova nel file *Ground-model.html*.
